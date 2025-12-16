@@ -1,4 +1,17 @@
 import { useState } from "react";
+export default async function handler(req, res) {
+     const { message } = req.body;
+
+ const res = await fetch("/api/chatbot", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message: userMessage }),
+});
+
+  const data = await response.json();
+  res.status(200).json({ reply: data.reply });
+}
+
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([]);
