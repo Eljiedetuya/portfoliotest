@@ -1,7 +1,8 @@
-import { defineConfig } from 'vite'
+﻿import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-// Proxy /api to local API server running on port 3005
 export default defineConfig({
+  plugins: [react()],
   server: {
     proxy: {
       '/api': {
