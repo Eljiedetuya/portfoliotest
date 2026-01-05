@@ -25,7 +25,7 @@ async function parseBody(req) {
 
 async function callGemini(promptText) {
   const apiKey = process.env.GOOGLE_API_KEY
-  const model = 'gemini-pro'  // Using the newer Gemini model
+  const model = 'gemini-1.5-flash'  // Using the latest available Gemini model
   if (!apiKey) throw new Error('GOOGLE_API_KEY not configured')
 
   const endpoint = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`
