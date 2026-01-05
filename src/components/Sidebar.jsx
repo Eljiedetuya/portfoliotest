@@ -38,7 +38,8 @@ export default function Sidebar() {
                 transition: 'all 0.2s',
                 textDecoration: 'none',
                 display: 'flex',
-                alignItems: 'center'
+                alignItems: 'center',
+                paddingLeft: 8
               })}
             >
               <span style={{ marginRight: 10 }}>{item.icon}</span>
