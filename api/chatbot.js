@@ -25,15 +25,21 @@ async function parseBody(req) {
 
 async function callGemini(promptText) {
   const apiKey = process.env.GOOGLE_API_KEY
-  const model = process.env.GEMINI_MODEL || 'models/text-bison-001'
+  const model = 'gemini-pro'  // Using the newer Gemini model
   if (!apiKey) throw new Error('GOOGLE_API_KEY not configured')
 
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta2/${model}:generateText?key=${encodeURIComponent(apiKey)}`
+  const endpoint = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`
 
   const body = {
-    prompt: { text: promptText },
-    temperature: 0.2,
-    maxOutputTokens: 512
+    contents: [
+      {
+        parts: [
+          {
+            text: promptText
+          }
+        ]
+      }
+    ]
   }
 
   const resp = await fetch(endpoint, {
@@ -50,29 +56,17 @@ async function callGemini(promptText) {
   }
 
   const json = await resp.json()
+  console.log('[chatbot] Gemini response:', JSON.stringify(json, null, 2))
 
-  // Try a few common response shapes to extract the generated text
-  // Preferred: json.candidates[0].content -> array of { text }
-  if (json.candidates && json.candidates.length) {
-    const c = json.candidates[0]
-    if (c.content && Array.isArray(c.content)) {
-      return c.content.map(p => (p.text || p)).join('')
+  // Extract text from the new Gemini API response format
+  if (json.candidates && json.candidates.length > 0) {
+    const candidate = json.candidates[0]
+    if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
+      return candidate.content.parts.map(p => p.text || '').join('')
     }
-    if (c.output) return c.output
-    if (c.text) return c.text
   }
 
-  // Another possible shape
-  if (json.output && Array.isArray(json.output) && json.output[0].content) {
-    return json.output[0].content.map(p => p.text || p).join('')
-  }
-
-  // Fallbacks
-  if (json.generatedText) return json.generatedText
-  if (json.text) return json.text
-
-  // Last resort: stringify whole response
-  return JSON.stringify(json)
+  return 'Sorry, I could not generate a response.'
 }
 
 module.exports = async (req, res) => {
