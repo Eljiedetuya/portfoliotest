@@ -26,7 +26,7 @@ export default function WorkExperience() {
   ]
 
   return (
-    <div>   
+    <div className="page">   
       <h2 style={{ fontSize: '1.5rem', marginBottom: 25, fontWeight: 'bold' }}>Work Experience</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 25 }}>
         {experiences.map((exp, idx) => (
