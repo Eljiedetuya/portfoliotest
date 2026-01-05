@@ -6,19 +6,20 @@
 
 const fetch = global.fetch || require('node-fetch')
 
-function safeParseBody(req) {
-  if (req.body && typeof req.body === 'object') return req.body
-  return new Promise((resolve) => {
-    let data = ''
-    req.on('data', chunk => (data += chunk))
+async function parseBody(req) {
+  return new Promise((resolve, reject) => {
+    let body = ''
+    req.on('data', chunk => {
+      body += chunk.toString()
+    })
     req.on('end', () => {
       try {
-        resolve(data ? JSON.parse(data) : {})
+        resolve(JSON.parse(body))
       } catch (e) {
         resolve({})
       }
     })
-    req.on('error', () => resolve({}))
+    req.on('error', reject)
   })
 }
 
@@ -75,13 +76,24 @@ async function callGemini(promptText) {
 }
 
 module.exports = async (req, res) => {
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Credentials', 'true')
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version')
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end()
+    return
+  }
+
   try {
     console.log('[chatbot] incoming', req.method, req.url)
     if (req.method !== 'POST') {
       return res.status(200).json({ reply: 'Send a POST with { message } to get a reply.' })
     }
 
-    const body = await safeParseBody(req)
+    const body = await parseBody(req)
     const message = (body && body.message) || ''
 
     // If no API key configured, return a helpful fallback so dev UX works.
