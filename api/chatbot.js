@@ -25,10 +25,10 @@ async function parseBody(req) {
 
 async function callGemini(promptText) {
   const apiKey = process.env.GOOGLE_API_KEY
-  const model = 'gemini-1.5-flash'  // Using the latest available Gemini model
   if (!apiKey) throw new Error('GOOGLE_API_KEY not configured')
 
-  const endpoint = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`
+  // Use the correct Gemini API v1 endpoint format
+  const endpoint = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`
 
   const body = {
     contents: [
@@ -39,7 +39,13 @@ async function callGemini(promptText) {
           }
         ]
       }
-    ]
+    ],
+    generationConfig: {
+      temperature: 1,
+      topK: 40,
+      topP: 0.95,
+      maxOutputTokens: 2048
+    }
   }
 
   const resp = await fetch(endpoint, {
