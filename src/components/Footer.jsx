@@ -2,15 +2,12 @@ import React from 'react'
 
 export default function Footer() {
   const socials = [
-    { icon: '🏠', label: 'Home', url: '#' },
-    { icon: '📄', label: 'Resume', url: '#' },
-    { icon: '🐙', label: 'GitHub', url: 'https://github.com' },
-    { icon: '💼', label: 'LinkedIn', url: 'https://linkedin.com' },
-    { icon: '𝕏', label: 'Twitter', url: 'https://twitter.com' },
+    { icon: '', label: 'GitHub', url: 'https://github.com/Eljiedetuya' },
     { icon: '📷', label: 'Instagram', url: 'https://instagram.com' },
-    { icon: '🎵', label: 'TikTok', url: 'https://tiktok.com' },
-    { icon: '☀️', label: 'Theme', url: '#' },
-    { icon: '💬', label: 'Chat', url: '#' }
+    { icon: '✉️', label: 'Gmail', url: 'mailto:eljie.magaso@example.com' },
+    { icon: '💼', label: 'LinkedIn', url: 'https://linkedin.com' },
+    { icon: '👍', label: 'Facebook', url: 'https://facebook.com' },
+    { icon: '💬', label: 'WhatsApp', url: 'https://wa.me/1234567890' }
   ]
 
   return (
