@@ -11,7 +11,6 @@ const fetch = global.fetch || require("node-fetch")
 
 /* =========================
    Temporary conversation memory
-   (resets on cold start)
 ========================= */
 let conversationHistory = []
 
@@ -106,14 +105,17 @@ module.exports = async (req, res) => {
       })
     }
 
+    /* =========================
+       FINAL PROFILE BIO (APPLIED)
+    ========================= */
     const profile =
       process.env.PROFILE_BIO ||
-      "A passionate full-stack developer with experience in React, Node.js, and modern web technologies."
+      `I am a passionate full-stack developer and creative with a strong interest in building modern, real-world applications. I work with React, Node.js, and Django to create functional and scalable systems, and I also have experience in graphic design and video editing using Adobe tools such as Photoshop, Illustrator, and Premiere Pro. I enjoy solving problems, designing clean user interfaces, and creating visually engaging content for both web and media platforms.`
 
     /* ---- No API key fallback ---- */
     if (!process.env.GOOGLE_API_KEY) {
       return res.status(200).json({
-        reply: generateSmartResponse(message, profile)
+        reply: generateSmartResponse(message)
       })
     }
 
@@ -122,16 +124,16 @@ module.exports = async (req, res) => {
     conversationHistory = conversationHistory.slice(-6)
 
     const prompt = `
-You are a professional AI assistant for a personal portfolio website.
+You are a professional assistant for a personal portfolio website.
 
 RULES:
-- Speak as the person (first-person)
-- Be friendly, confident, and concise
+- Speak in first person as the portfolio owner
+- Be confident, friendly, and concise
 - Do NOT mention AI, Gemini, or models
-- Max 2–3 sentences
+- Maximum 2–3 sentences
 - If unsure, politely redirect
 
-PERSON PROFILE:
+PROFILE:
 ${profile}
 
 CONVERSATION:
@@ -144,12 +146,11 @@ ${message}
     try {
       const reply = await callGemini(prompt)
       conversationHistory.push(`Assistant: ${reply}`)
-
       return res.status(200).json({ reply })
     } catch (apiErr) {
       console.error("[Gemini failed]", apiErr.message)
       return res.status(200).json({
-        reply: generateSmartResponse(message, profile)
+        reply: generateSmartResponse(message)
       })
     }
   } catch (err) {
@@ -162,34 +163,62 @@ ${message}
 }
 
 /* =========================
-   Smart Local Fallback
+   IMPROVED SMART RESPONSES
 ========================= */
-function generateSmartResponse(question, bio) {
+function generateSmartResponse(question) {
   const q = question.toLowerCase()
 
-  if (q.includes("skill") || q.includes("expert")) {
-    return "I specialize in full-stack web development, focusing on React, Node.js, APIs, and modern UI/UX. I enjoy building scalable and user-friendly applications."
+  // 👋 Greeting
+  if (q.includes("hello") || q.includes("hi") || q.includes("hey")) {
+    return "Hi! Welcome to my portfolio 👋 Feel free to ask about my development skills, design work, or creative projects."
+  }
+  // 🤷‍♂️About me  
+  if (q.includes("tell me about yourself") || q.includes("about you") || q.includes("tell me about you")) {
+    return "My name is Eljie Detuya, and I’m a BSIT student at Cebu Technological University – Ginatilan Extension Campus. I’m interested in full-stack web development, working with React, Node.js, and Django, and I also have skills in graphic design and video editing using Adobe tools such as Photoshop, Illustrator, and Premiere Pro. I enjoy learning by building real-world projects and continuously improving both my technical and creative skills."
   }
 
-  if (q.includes("project") || q.includes("work")) {
-    return "I’ve worked on full-stack web apps, dashboards, and API-driven systems. Each project helped me improve performance, design, and clean architecture."
+  // 🧠 Skills / Expertise
+  if (q.includes("skill") || q.includes("expert") || q.includes("what can you do")) {
+    return "I’m a full-stack developer and creative with skills in React, Node.js, Django, and API development. I also do graphic design and video editing using Adobe tools like Photoshop, Illustrator, and Premiere Pro."
+  }
+   
+  // 🏗️ Projects / Work
+  if (q.includes("project") || q.includes("work") || q.includes("portfolio")) {
+    return "I’ve worked on full-stack web projects such as POS systems, REST APIs, and interactive websites. Alongside development, I also create visual designs and edited videos to support branding and user engagement."
   }
 
-  if (q.includes("contact") || q.includes("hire")) {
-    return "You can reach out through my contact section or email. I’m open to collaborations, freelance work, and full-time opportunities."
+  // 🎨 Frontend & Design
+  if (q.includes("frontend") || q.includes("ui") || q.includes("design")) {
+    return "On the frontend, I focus on React, responsive layouts, and clean UI design. My background in graphic design helps me create interfaces that are both functional and visually appealing."
   }
 
-  if (q.includes("frontend") || q.includes("ui")) {
-    return "On the frontend, I focus on React, responsive design, accessibility, and clean UI using Tailwind and modern CSS."
+  // 🎬 Video Editing
+  if (q.includes("video") || q.includes("editing")) {
+    return "I have experience in video editing for digital content using Adobe Premiere Pro and related tools. I enjoy creating clean, engaging videos that support storytelling and branding."
   }
 
-  if (q.includes("backend") || q.includes("api")) {
-    return "On the backend, I build secure and scalable APIs using Node.js and databases, with attention to performance and maintainability."
+  // 🔧 Backend
+  if (q.includes("backend") || q.includes("api") || q.includes("server")) {
+    return "For backend development, I build secure and scalable APIs using Node.js and Django. I focus on clean architecture, database design, and system reliability."
   }
 
-  if (q.includes("hello") || q.includes("hi")) {
-    return "Hi 👋 Welcome to my portfolio! Feel free to ask about my skills, projects, or experience."
+  // 💼 Background / Experience
+  if (q.includes("experience") || q.includes("background")) {
+    return "I’m a motivated developer and creative who learns by building real projects. Combining programming with design and media skills allows me to create complete, well-rounded digital products."
   }
 
-  return "That’s a great question! Feel free to ask about my skills, projects, tech stack, or how to get in touch."
+  // 🚀 Passion / Motivation
+  if (q.includes("passion") || q.includes("why") || q.includes("love")) {
+    return "I enjoy both coding and creative work because they let me turn ideas into real products. I’m passionate about continuous learning, improving my skills, and creating work that looks good and works well."
+  }
+
+  // 📧 Contact / Hiring
+  if (q.includes("contact") || q.includes("hire") || q.includes("email")) {
+    return "I’m open to collaboration, freelance projects, and junior-level opportunities. Feel free to reach out if you’re interested in working together."
+  }
+
+  // Default
+  return "That’s a great question! Feel free to ask about my development skills, design work, creative projects, or anything else you’d like to know."
+
 }
+
