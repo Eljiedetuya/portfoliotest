@@ -27,52 +27,58 @@ async function callGemini(promptText) {
   const apiKey = process.env.GOOGLE_API_KEY
   if (!apiKey) throw new Error('GOOGLE_API_KEY not configured')
 
-  // Use the correct Gemini API v1 endpoint format
-  const endpoint = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`
+  // Try multiple possible models in order of preference
+  const models = ['gemini-1.5-flash', 'gemini-pro', 'gemini-1.5-pro', 'text-bison-001']
+  
+  for (const model of models) {
+    try {
+      console.log(`[chatbot] Trying model: ${model}`)
+      const endpoint = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`
 
-  const body = {
-    contents: [
-      {
-        parts: [
+      const body = {
+        contents: [
           {
-            text: promptText
+            parts: [
+              {
+                text: promptText
+              }
+            ]
           }
-        ]
+        ],
+        generationConfig: {
+          temperature: 1,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 2048
+        }
       }
-    ],
-    generationConfig: {
-      temperature: 1,
-      topK: 40,
-      topP: 0.95,
-      maxOutputTokens: 2048
+
+      const resp = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+
+      if (resp.ok) {
+        const json = await resp.json()
+        console.log(`[chatbot] Success with model: ${model}`)
+        
+        // Extract text from the Gemini API response
+        if (json.candidates && json.candidates.length > 0) {
+          const candidate = json.candidates[0]
+          if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
+            return candidate.content.parts.map(p => p.text || '').join('')
+          }
+        }
+        return 'Sorry, I could not generate a response.'
+      }
+    } catch (e) {
+      console.log(`[chatbot] Model ${model} failed:`, String(e))
+      continue
     }
   }
 
-  const resp = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  })
-
-  if (!resp.ok) {
-    const txt = await resp.text()
-    const err = new Error(`Gemini API error: ${resp.status} ${txt}`)
-    err.status = resp.status
-    throw err
-  }
-
-  const json = await resp.json()
-  console.log('[chatbot] Gemini response:', JSON.stringify(json, null, 2))
-
-  // Extract text from the new Gemini API response format
-  if (json.candidates && json.candidates.length > 0) {
-    const candidate = json.candidates[0]
-    if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
-      return candidate.content.parts.map(p => p.text || '').join('')
-    }
-  }
-
-  return 'Sorry, I could not generate a response.'
+  throw new Error('All Gemini models failed. API key may not have access to these models.')
 }
 
 module.exports = async (req, res) => {
