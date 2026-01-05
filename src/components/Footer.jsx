@@ -2,6 +2,7 @@ import React from 'react'
 
 export default function Footer() {
   const socials = [
+    { icon: '📄', label: 'Resume', url: '#' },
     { icon: '', label: 'GitHub', url: 'https://github.com/Eljiedetuya' },
     { icon: '📷', label: 'Instagram', url: 'https://instagram.com' },
     { icon: '✉️', label: 'Gmail', url: 'mailto:eljie.magaso@example.com' },
