@@ -14,7 +14,7 @@ export default function Hero() {
         </div>
       </div>
       <p style={{ color: '#555', lineHeight: 1.6, margin: 0, fontSize: '0.95rem' }}>
-        I specialize in building production AI systems that solve real business problems at scale. My work focuses on full-stack development, AI automation, and serverless infrastructure that consistently delivers measurable impact.
+        I  focus on building practical skills that help businesses grow. My work is centered on understanding business needs, solving real problems, and turning ideas into results. I enjoy working on strategies that improve efficiency, increase revenue, and create long-term value. My goal is simple: help businesses scale smarter and perform better.
       </p>
     </div>
   )
