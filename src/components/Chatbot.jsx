@@ -59,15 +59,21 @@ export default function Chatbot() {
           <div style={{ padding: 16, height: 320, overflowY: 'auto', background: '#fafafa', flex: 1 }}>
             {messages.length === 1 ? (
               <div style={{ marginTop: 16 }}>
-                <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: 16 }}>Suggested questions:</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <p style={{ color: '#333', fontSize: '0.9rem', marginBottom: 16, fontWeight: '500' }}>Suggested questions:</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {SUGGESTED_QUESTIONS.map((q, i) => (
                     <button
                       key={i}
                       onClick={() => sendMessage(q)}
-                      style={{ padding: '10px 14px', border: '1px solid #ddd', borderRadius: 20, background: '#fff', cursor: 'pointer', fontSize: '0.85rem', textAlign: 'center', transition: 'all 0.2s', hover: { borderColor: '#667eea' } }}
-                      onMouseOver={(e) => e.target.style.borderColor = '#667eea'}
-                      onMouseOut={(e) => e.target.style.borderColor = '#ddd'}
+                      style={{ padding: '12px 14px', border: '2px solid #ddd', borderRadius: 20, background: '#fff', cursor: 'pointer', fontSize: '0.9rem', textAlign: 'left', transition: 'all 0.2s', color: '#333', fontWeight: '500' }}
+                      onMouseOver={(e) => {
+                        e.target.style.borderColor = '#667eea'
+                        e.target.style.background = '#f0f4ff'
+                      }}
+                      onMouseOut={(e) => {
+                        e.target.style.borderColor = '#ddd'
+                        e.target.style.background = '#fff'
+                      }}
                     >
                       {q}
                     </button>
