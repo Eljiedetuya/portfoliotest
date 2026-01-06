@@ -47,7 +47,7 @@ export default function Projects() {
   ]
 
   return (
-    <section style={{ marginBottom: 90 }}>
+    <section id="projects" style={{ marginBottom: 90 }}>
       <h2
         style={{
           fontSize: "2.2rem",

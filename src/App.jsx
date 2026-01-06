@@ -10,11 +10,13 @@ import Certifications from './components/pages/Certifications'
 import Contact from './components/pages/Contact'
 import Footer from './components/Footer'
 import Chatbot from './components/Chatbot'
+import Navbar from './components/Navbar'
 import './App.css'
 
 export default function App() {
   return (
     <div style={{ backgroundColor: '#fff', minHeight: '100vh' }}>
+      <Navbar />
       <div style={{ padding: '40px 60px', maxWidth: 1200, margin: '0 auto' }}>
         <Hero />
         <WorkExperience />

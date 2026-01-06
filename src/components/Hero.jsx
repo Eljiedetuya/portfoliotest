@@ -2,7 +2,7 @@ import React from "react"
 
 export default function Hero() {
   return (
-    <section
+    <section id="home"
       style={{
         padding: "60px 40px",
         borderRadius: 16,

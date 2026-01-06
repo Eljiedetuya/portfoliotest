@@ -2,7 +2,7 @@ import React from "react"
 
 export default function About() {
   return (
-    <section style={{ marginBottom: 80 }}>
+    <section id="about" style={{ marginBottom: 80 }}>
       <h2
         style={{
           fontSize: "2.2rem",
