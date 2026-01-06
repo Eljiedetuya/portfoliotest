@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Contact() {
   return (
-    <div className="page">
+    <div>
       <section>
         <h2 style={{ fontSize: '2rem', marginBottom: 30, fontWeight: 'bold' }}>Get In Touch</h2>
         

@@ -11,7 +11,7 @@ export default function Education() {
   ]
 
   return (
-    <div className="page">
+    <div>
       <section>
         <h2 style={{ fontSize: '2rem', marginBottom: 30, fontWeight: 'bold' }}>Education</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>

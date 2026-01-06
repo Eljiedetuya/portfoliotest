@@ -23,7 +23,7 @@ export default function Projects() {
   ]
 
   return (
-    <div className="page">
+    <div>
       <section>
         <h2 style={{ fontSize: '2rem', marginBottom: 30, fontWeight: 'bold' }}>Featured Projects</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 25 }}>

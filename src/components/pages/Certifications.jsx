@@ -8,7 +8,7 @@ export default function Certifications() {
   ]
 
   return (
-    <div className="page">
+    <div>
       <section>
         <h2 style={{ fontSize: '2rem', marginBottom: 30, fontWeight: 'bold' }}>Certifications & Achievements</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
