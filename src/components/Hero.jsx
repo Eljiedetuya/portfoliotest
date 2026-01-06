@@ -64,11 +64,7 @@ export default function Hero() {
               fontSize: "1rem",
             }}
           >
-            I’m a BSIT student at Cebu Technological University – Ginatilan Extension
-            Campus with a strong passion for building modern web applications. I work
-            with React, Node.js, and Django to create functional systems, and I also
-            design visuals and edit videos using Adobe Photoshop, Illustrator, and
-            Premiere Pro.
+            I specialize in building modern web applications and production-ready AI systems that solve real-world problems at scale. My work spans React, Node.js, Django, and serverless architectures, combined with multi-agent AI automation to optimize workflows and deliver measurable efficiency gains. Alongside development, I create visually engaging content using Adobe Photoshop, Illustrator, Premiere Pro, Figma, and Canva, ensuring both functionality and design excellence. I move fast from concept to production, focusing on impact, scalability, and user experience.
           </p>
 
           {/* Tech Stack */}
